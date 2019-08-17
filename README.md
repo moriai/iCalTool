@@ -13,7 +13,7 @@ $ swift build -c release
 $ cp .build/release/iCalTool ~/bin
 ```
 
-`~/bin` は適当にパスの通っているディレクトリに直して下さい。`/usr/bin` より先に検索されるディレクトリにして下さい。
+`~/bin` の部分は適当にパスの通っているディレクトリに直して下さい。
 
 ### 方法 2. Xcode もしくは xcodebuild を使う
 
@@ -23,9 +23,9 @@ Swift Package Manager で xcodeproj を生成する必要があります。
 $ swift package generate-xcodeproj
 ```
 
-`iCalTool.xcodeproj` が生成されますので、あとは、Xcode もしくは xcodebuild でビルドして下さい。なお、`Package.swift` を変更した場合には、`iCalTool.xcodeproj` を再生成する必要があります。
+`iCalTool.xcodeproj` が生成されますので、あとは、Xcode もしくは xcodebuild でビルドして下さい。
 
-なお、`iCalTool.xcodeproj` を生成した直後は、ターゲットが iOS になっている場合があります。この時は、落ち着いて、My Mac をターゲットに設定し直して下さい。
+なお、`iCalTool.xcodeproj` を生成した直後は、ターゲットが iOS などになっている場合があります。この時は、My Mac をターゲットに設定し直して下さい。
 
 
 ## 使い方
