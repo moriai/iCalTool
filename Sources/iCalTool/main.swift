@@ -182,7 +182,7 @@ extension EKEvent {
 }
 
 enum CalendarOps {
-    case List, AddEvent, DeleteEvent, Sync, Diff, DoIt, AddTestEvent
+    case List, AddEvent, DeleteEvent, Sync, Diff, DoIt
 }
 
 var argv = ArraySlice(CommandLine.arguments)
@@ -230,7 +230,6 @@ switch opString {
     case "listn":   op = .List; printOption = .withNotes
     case "listi":   op = .List; printOption = .onlyUID
     case "add":     op = .AddEvent
-    case "addx":    op = .AddTestEvent
     case "sync":    op = .Sync
     case "diff":    op = .Diff
     case "delete":  op = .DeleteEvent
@@ -248,7 +247,7 @@ eventStore.requestAccess(to: .event,
         }
 )
 
-if op == .List || op == .AddTestEvent {
+if op == .List {
     var calendarName = ""
     if argv.count >= 1 {
         calendarName = argv.removeFirst()
@@ -277,22 +276,6 @@ if op == .List || op == .AddTestEvent {
                 print(event.string(printOption))
             }
         }
-    }
-
-    if op == .AddTestEvent {
-        let currentDate = Date()
-        let startDate = currentDate.addingTimeInterval(3600*2)
-        let endDate = startDate.addingTimeInterval(3600*1)
-        let event = EKEvent(eventStore: eventStore)
-        event.title = "Test EVENT"
-        event.location = "My Room"
-        event.startDate = startDate
-        event.endDate = endDate
-        event.isAllDay = false
-        event.calendar = calendar
-        event.notes = "memo memo memo"
-        dprint(1, "\(event.calendarItemIdentifier)")
-        eventStore.add(event: event)
     }
 
 } else if op == .AddEvent {
