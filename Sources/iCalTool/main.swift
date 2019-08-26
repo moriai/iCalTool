@@ -59,7 +59,7 @@ extension EKEventStore {
     }
 
     func calendar(withName name: String) -> EKCalendar? {
-        if name == "" {
+        if name == "" || name == "." {
             return self.defaultCalendarForNewEvents
         }
         for cal in self.calendars(for: .event) {
@@ -161,22 +161,35 @@ extension Optional where Wrapped == Date {
     }
 }
 
-enum EventStringOption {
-    case withNotes, onlyUID, none
+enum EKStringOption {
+    case longFormat, onlyUUID, defaultFormat
 }
 
 extension EKEvent {
-    func string(_ addenda: EventStringOption = .none) -> String {
+    func string(_ option: EKStringOption = .defaultFormat) -> String {
         let title = self.title.escapeDQuote()
         let location = self.location.escapeDQuote()
-        switch addenda {
-            case .withNotes:
+        switch option {
+            case .longFormat:
                 let notes = self.notes.escapeDQuote()
                 return "\"\(title)\",\"\(self.startDate.string())\",\"\(self.endDate.string())\",\"\(self.isAllDay.string())\",\"\(location)\",\"\(notes)\",\"\(self.calendarItemIdentifier)\""
-            case .onlyUID:
+            case .onlyUUID:
                 return "\(self.calendarItemIdentifier)"
             default:
                 return "\"\(title)\",\"\(self.startDate.string())\",\"\(self.endDate.string())\",\"\(self.isAllDay.string())\",\"\(location)\",\"\(self.calendarItemIdentifier)\""
+        }
+    }
+}
+
+extension EKCalendar {
+    func string(_ option: EKStringOption = .defaultFormat) -> String {
+        switch option {
+        case .longFormat:
+            return "\(calendarIdentifier),\"\(title)\""
+        case .onlyUUID:
+            return "\(calendarIdentifier)"
+        default:
+            return "\"\(title)\""
         }
     }
 }
@@ -224,11 +237,11 @@ guard let opString = argv.popFirst() else {
 }
 
 var op: CalendarOps = .DoIt
-var printOption: EventStringOption = .none
+var printOption: EKStringOption = .defaultFormat
 switch opString {
     case "list":    op = .List
-    case "listn":   op = .List; printOption = .withNotes
-    case "listi":   op = .List; printOption = .onlyUID
+    case "listn":   op = .List; printOption = .longFormat
+    case "listi":   op = .List; printOption = .onlyUUID
     case "add":     op = .AddEvent
     case "sync":    op = .Sync
     case "diff":    op = .Diff
@@ -248,16 +261,19 @@ eventStore.requestAccess(to: .event,
 )
 
 if op == .List {
-    var calendarName = ""
-    if argv.count >= 1 {
-        calendarName = argv.removeFirst()
-    }
-    guard let calendar = eventStore.calendar(withName: calendarName) else {
-        print("Unknown calendar: \"\(calendarName)\"")
-        exit(1)
-    }
+    if argv.count == 0 {
+        for calendar in eventStore.calendars(for: .event) {
+            print(calendar.string(printOption), (calendar == eventStore.defaultCalendarForNewEvents ? ",*" : ""), separator: "")
+        }
 
-    if op == .List {
+    } else {
+        let calendarName = argv.removeFirst()
+
+        guard let calendar = eventStore.calendar(withName: calendarName) else {
+            print("Unknown calendar: \"\(calendarName)\"")
+            exit(1)
+        }
+
         let currentDate = Date()
         var startDate = currentDate.addingTimeInterval(-86400*(365*3+1))
         if argv.count >= 1 {

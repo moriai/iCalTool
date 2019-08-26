@@ -34,7 +34,7 @@ $ swift package generate-xcodeproj
 
 ```
 $ iCalTool
-iCalTool 1.0
+iCalTool 1.0.2
 The macOS Calendar manipulation tool
 
 Usage: iCalTool [Flag] <Subcommand> ...
@@ -58,13 +58,15 @@ Subcommands:
 
 ### list[n|i] [calendar-name [start-date [end-date]]]
 
-指定したカレンダーを CSV 形式で出力します。ただし、<font color="Red">エンコーディングは UTF-8 で出力されます</font>ので、ファイルに保存して、EXCEL 等に開きたい場合には、適切なツール（`nkf`とか）で Shift JIS に変換した方が良いでしょう。
+指定したカレンダーを CSV 形式で出力します。ただし、<font color="Red">エンコーディングは UTF-8 で出力されます</font>ので、出力を保存したファイルを EXCEL で開きたい場合には、適切なツール（`nkf` など）で Shift JIS に変換してからファイルに保存した方が良いでしょう。
 
-カレンダーとして "" を指定すると、macOS のカレンダーアプリのデフォールトカレンダーを指定したことになります。ただ、なぜかそうならないこともあり、原因は不明です。
+カレンダーとして "" もしくは "." を指定すると、macOS のカレンダーアプリのデフォールトカレンダーを指定したことになります。ただ、なぜかそうならないこともあり、原因は不明です。
 
 `start-date` と `end-date` で出力する期間を指定することができます。指定可能なフォーマットは `yyyy/MM/dd[ HH:mm[:ss]]` です。
 
-`list` の代わりに `listn` とするとノートも出力されます。 `listi` とするとイベントの UUID のみが出力されます。
+`list` の代わりに `listn` とするとノートも出力されます。 `listi` とすると UUID のみが出力されます。
+
+引数に何も指定しない場合には、カレンダーの一覧が出力されます。
 
 ### delete [uuid]...
 
@@ -120,4 +122,4 @@ $ nkf -s *.csv | iCalTool add -
 
 
 著者: Satoshi Moriai <https://github.com/moriai>
-バージョン: 1.0 (2019/8/15)
+バージョン: 1.0.2 (2019/8/27)
