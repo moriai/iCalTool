@@ -115,12 +115,11 @@ $ nkf -s *.csv | iCalTool add -
 
 `start-date` や `end-date` が指定されない場合には、`csv-file` の中身をスキャンして、最も早くから始まるイベントの開始日時を `start-date`、最も遅く終了するイベントの終了日時を `end-date` とします。
 
-
 ファイル名として `-` を指定すると、標準入力から読み込まれます。
 
 ### diff (csv-file|-) [start-date [end-date]]
 
-`start-date` と `end-date` の間のカレンダーと `csv-file` の内容を比較します。`sync` と同様で、`sync` の dry run 相当です。
+`start-date` と `end-date` の間のカレンダーと `csv-file` の内容を比較します。`sync` の dry run 相当です。
 
 ## その他注意事項
 
