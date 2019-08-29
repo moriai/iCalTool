@@ -130,4 +130,4 @@ $ nkf -s *.csv | iCalTool add -
 
 
 著者: Satoshi Moriai <https://github.com/moriai>
-バージョン: 1.0.3 (2019/8/30)
+バージョン: 1.0.4 (2019/8/30)
