@@ -195,7 +195,7 @@ extension EKCalendar {
 }
 
 enum CalendarOps {
-    case List, AddEvent, DeleteEvent, Sync, Diff, DoIt
+    case List, AddEvent, DeleteEvent, Sync, Diff, Describe, DoIt
 }
 
 var argv = ArraySlice(CommandLine.arguments)
@@ -216,6 +216,7 @@ let usage = """
             add [csv-file|-]
             sync (csv-file|-) [start-date [end-date]]
             diff (csv-file|-) [start-date [end-date]]
+            desc[n] [uuid]...
             delete [uuid]...
             help
 
@@ -245,6 +246,8 @@ switch opString {
     case "add":     op = .AddEvent
     case "sync":    op = .Sync
     case "diff":    op = .Diff
+    case "desc":    op = .Describe
+    case "descn":   op = .Describe; printOption = .longFormat
     case "delete":  op = .DeleteEvent
     case "help":    print(usage); exit(0)
     default:        print("\(opString): unknown command"); exit(1)
@@ -408,6 +411,17 @@ if op == .List {
     }
 
     dprint(0, "\(unchanged) unchanged, \(added) added, \(removed) removed")
+
+} else if op == .Describe {
+    for id in argv {
+        if let event = eventStore.event(withIdentifier: id) {
+            print(event.string(printOption))
+        } else if let calendar = eventStore.calendar(withIdentifier: id) {
+            print(calendar.string(printOption))
+        } else {
+            print("No such event or calendar: \(id)")
+        }
+    }
 
 } else if op == .DeleteEvent {
     for id in argv {
