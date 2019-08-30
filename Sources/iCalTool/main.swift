@@ -181,11 +181,31 @@ extension EKEvent {
     }
 }
 
+extension EKCalendarType {
+    func string() -> String {
+        switch self {
+        case .local:
+            return "LOCAL"
+        case .calDAV:
+            return "CALDAV"
+        case .exchange:
+            return "EXCHANGE"
+        case .subscription:
+            return "SUBSCRIPTION"
+        case .birthday:
+            return "BIRTHDAY"
+        default:
+            return "UNKNOWN"
+        }
+    }
+}
+
 extension EKCalendar {
     func string(_ option: EKStringOption = .defaultFormat) -> String {
         switch option {
         case .longFormat:
-            return "\(calendarIdentifier),\"\(title)\""
+            let sourceTitle = source != nil ? source.title : ""
+            return "\(calendarIdentifier),\"\(title)\",\"\(type.string()):\(sourceTitle)\""
         case .onlyUUID:
             return "\(calendarIdentifier)"
         default:
