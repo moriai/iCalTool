@@ -34,7 +34,7 @@ $ swift package generate-xcodeproj
 
 ```
 $ iCalTool
-iCalTool 1.0.2
+iCalTool 1.0.5
 The macOS Calendar manipulation tool
 
 Usage: iCalTool [Flag] <Subcommand> ...
@@ -49,6 +49,7 @@ Subcommands:
     add [csv-file|-]
     sync (csv-file|-) [start-date [end-date]]
     diff (csv-file|-) [start-date [end-date]]
+    desc[n] [uuid]...
     delete [uuid]...
     help
 
@@ -129,4 +130,4 @@ $ nkf -s *.csv | iCalTool add -
 
 
 著者: Satoshi Moriai <https://github.com/moriai>
-バージョン: 1.0.4 (2019/8/30)
+バージョン: 1.0.5 (2019/8/30)
